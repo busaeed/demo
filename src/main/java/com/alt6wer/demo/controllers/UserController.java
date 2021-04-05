@@ -19,7 +19,7 @@ public class UserController {
     
     @GetMapping("/all")
     public String getUsers() {
-        return userRepository.findById(1).getUsername();
+        return userRepository.findByUsername("gant").getEmail();
     }
 
 }
