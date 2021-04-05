@@ -6,13 +6,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
-    
-    @RequestMapping(value = "/")
+        
+    @RequestMapping(value = "/test")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("index");
-        String name = "Mohammed Bu Saeed";
-        modelAndView.addObject("name", name);
-        return modelAndView;
+        ModelAndView view = new ModelAndView("index");
+        view.addObject("name", "test");
+        return view;
     }
 
 }
