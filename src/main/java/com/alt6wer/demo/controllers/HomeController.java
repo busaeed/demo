@@ -10,7 +10,7 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
-        String name = "Mohammed Ahmed Abobakr Bu Saeed";
+        String name = "Mohammed Bu Saeed";
         modelAndView.addObject("name", name);
         return modelAndView;
     }
