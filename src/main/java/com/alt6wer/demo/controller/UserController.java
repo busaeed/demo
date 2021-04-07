@@ -30,8 +30,8 @@ public class UserController {
         /*User user = new User("BU SAEED21", "bosaeed201160@gmail.com", "123456");
         return userDAO.addNewUser(user);*/
         List<Forum> forums = forumRepository.findAll();
-        //Forum forum = forums.isEmpty() ? null : forums.get(0);
-        return forums.size();
+        Forum forum = forums.isEmpty() ? null : forums.get(0);
+        return forum.getId();
     }
 
 }

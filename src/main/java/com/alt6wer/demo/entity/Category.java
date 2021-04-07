@@ -11,8 +11,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name="categories")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Category {
     
     @Id
@@ -27,51 +36,11 @@ public class Category {
     
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private List<Forum> forums;
-    
-    @SuppressWarnings("unused")
-    protected Category() {}
 
     public Category(String name, int order) {
         super();
         this.name = name;
         this.order = order;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    public List<Forum> getForums() {
-        return forums;
-    }
-
-    public void setForums(List<Forum> forums) {
-        this.forums = forums;
-    }
-
-    @Override
-    public String toString() {
-        return "Category [id=" + id + ", name=" + name + ", order=" + order + ", forums=" + forums + "]";
     }
 
 }
