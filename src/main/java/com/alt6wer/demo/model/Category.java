@@ -1,4 +1,4 @@
-package com.alt6wer.demo.entity;
+package com.alt6wer.demo.model;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="categories")
+@Table
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,16 +31,15 @@ public class Category {
     @Column(nullable = false, length=50)
     private String name;
     
-    @Column(nullable = true, name = "`order`")
-    private int order;
+    private int ordering;
     
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Forum> forums;
 
     public Category(String name, int order) {
         super();
         this.name = name;
-        this.order = order;
+        this.ordering = order;
     }
 
 }

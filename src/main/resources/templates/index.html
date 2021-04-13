@@ -4,6 +4,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-Your name is <label th:text="${name}"></label>
+Your name is <label th:text="${#httpServletRequest.remoteUser}"></label>
+<h3 th:inline="text">Result = [[${result}]]</h3>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout" />
+</form>
 </body>
 </html>
