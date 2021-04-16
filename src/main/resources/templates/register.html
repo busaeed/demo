@@ -1,10 +1,32 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-Registeration page goes here.
+<form th:action="@{/register}" method="post" th:object="${member}">
+	<label>Username: </label>
+	<input type="text" th:field="*{username}" />
+	<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span><br/>
+	<label>Email: </label>
+	<input type="email" th:field="*{email}" />
+	<span th:each="errMsg, errStatus: ${#fields.errors('email')}" th:text="!${errStatus.last} ? ${errMsg} + ', ': ${errMsg} + '.'"></span><br/>
+	<label>Password: </label>
+	<input type="password" th:field="*{password}" />
+	<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect Password</span><br/>
+	<label>Confirmed Password: </label>
+	<input type="password" th:field="*{confirmedPassword}" />
+	<!--<ul>
+  		<li th:each="err : ${#fields.errors('confirmedPassword')}" th:text="${err}" />
+	</ul>-->
+	<!--<span th:each="err : ${#fields.errors('confirmedPassword')}" th:text="${err}" /><br/>-->
+	<th:block th:each="errMsg, errStatus: ${#fields.errors('confirmedPassword')}">
+		<th:block th:text="!${errStatus.last} ? ${errMsg} + ', ': ${errMsg} + '.'"></th:block>
+	</th:block>
+	<!--<span th:each="errMsg, errStatus: ${#fields.errors('confirmedPassword')}" th:text="!${errStatus.last} ? ${errMsg} + ', ': ${errMsg} + '.'"></span>--><br/>
+	<input type="submit" value="Register" />
+</form>
 </body>
 </html>

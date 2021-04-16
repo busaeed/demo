@@ -9,5 +9,6 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
     Member findById(int userId);
     Member findByUsername(String username);
     Member findByEmail(String email);
+	Member findByVerificationCode(String verificationCode);
     
 }

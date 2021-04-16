@@ -14,8 +14,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ColumnDefault;
+
+import com.alt6wer.demo.validator.IdenticalPasswords;
+import com.alt6wer.demo.validator.UniqueEmail;
+import com.alt6wer.demo.validator.UniqueUsername;
+import com.alt6wer.demo.validator.ValidEmail;
+
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +35,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@IdenticalPasswords
 public class Member implements Serializable {
     
     @Id
@@ -33,17 +43,32 @@ public class Member implements Serializable {
     private int id;
     
     @Column(nullable = false, unique = true, length = 50)
+    @Size(min = 3, max = 50)
+    @UniqueUsername
     private String username;
     
     @Column(nullable = false, unique = true, length = 100)
+    @UniqueEmail
+    @ValidEmail
     private String email;
     
-    @Column(nullable = false, length = 60)
+    @Transient
+    @Size(min = 6, max = 60)
     private String password;
+    
+    @Transient
+    @NotBlank
+    private String confirmedPassword;
+    
+    @Column(name = "password", nullable = false, length = 60)
+    private String hashedPassword;
     
     @Column(nullable = false)
     @ColumnDefault("0")
     private boolean active;
+    
+    @Column(length = 64)
+    private String verificationCode;
     
     @Column(nullable = false)
     private LocalDateTime registeredAt;
@@ -68,11 +93,12 @@ public class Member implements Serializable {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "Member [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-                + ", active=" + active + ", registeredAt=" + registeredAt + ", lastActivity=" + lastActivity + ", role="
-                + role.getRoleName() + "]";
-    }
+	@Override
+	public String toString() {
+		return "Member [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", confirmedPassword=" + confirmedPassword + ", hashedPassword=" + hashedPassword + ", active="
+				+ active + ", verificationCode=" + verificationCode + ", registeredAt=" + registeredAt
+				+ ", lastActivity=" + lastActivity + ", role=" + role.getRoleName() + "]";
+	}
     
 }

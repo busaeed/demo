@@ -8,4 +8,6 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
     
     Role findById(int id);
 
+	Role findByRoleName(String roleName);
+
 }
