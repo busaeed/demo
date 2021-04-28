@@ -20,5 +20,9 @@ public class ReplyService {
         reply.setCreatedAt(currentDateTime);
         return replyRepository.save(reply);
     }
+    
+    public int findTotalNumberOfReplies() {
+    	return replyRepository.countBy();
+    }
 
 }

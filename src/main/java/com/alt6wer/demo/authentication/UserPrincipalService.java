@@ -1,4 +1,4 @@
-package com.alt6wer.demo.security;
+package com.alt6wer.demo.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,7 @@ import com.alt6wer.demo.model.Member;
 import com.alt6wer.demo.service.MemberService;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class UserPrincipalService implements UserDetailsService {
     
     @Autowired
     private MemberService memberService;
@@ -21,7 +21,7 @@ public class MyUserDetailsService implements UserDetailsService {
         if (member == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new MyUserPrincipal(member);
+        return new UserPrincipal(member);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.alt6wer.demo.security;
+package com.alt6wer.demo.authentication;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,11 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.alt6wer.demo.model.Member;
 
-public class MyUserPrincipal implements UserDetails {
+public class UserPrincipal implements UserDetails {
     
     private Member member;
 
-    public MyUserPrincipal(Member member) {
+    public UserPrincipal(Member member) {
         this.member = member;
     }
 
@@ -51,6 +51,11 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return member.isActive();
+    }
+    
+    //the following is explicitly defined method
+    public int getId() {
+    	return member.getId();
     }
 
 }

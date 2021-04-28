@@ -1,19 +1,17 @@
 package com.alt6wer.demo.service;
 
-import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alt6wer.demo.model.Member;
+import com.alt6wer.demo.model.ResetPassword;
 import com.alt6wer.demo.model.Role;
 import com.alt6wer.demo.repository.MemberRepository;
 
@@ -26,12 +24,9 @@ public class MemberService {
     private MemberRepository memberRepository;
     
     @Autowired
-    private JavaMailSender mailSender;
-    
-    @Autowired
     private RoleService roleService;
     
-    public Member createMember(Member member) throws UnsupportedEncodingException, MessagingException {
+    public Member createMember(Member member) {
         member.setHashedPassword(this.hashPassword(member.getPassword()));
         member.setRegisteredAt(this.getCurrentLocalDateTime());
         member.setVerificationCode(RandomString.make(64));
@@ -54,25 +49,8 @@ public class MemberService {
     private Role getDefaultRole() {
     	return roleService.findByRoleName("ROLE_USER");
     }
-    
-    public void sendVerificationEmail(Member member) throws UnsupportedEncodingException, MessagingException {
-        String content = "Dear " + member.getUsername() + ",<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"" + "http://localhost:8080/verify?verificationCode=" + member.getVerificationCode() + "\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Your company name.";
-         
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-         
-        helper.setFrom("bosaeed2011@gmail.com", "SpringBootWebsite");
-        helper.setTo(member.getEmail());
-        helper.setSubject("Verification code for springboot app");
-        helper.setText(content, true); //true to enable html (optional parameter)
-         
-        mailSender.send(message);
-    }
 
+    @Cacheable(value="member", key="#memberId")
     public Member findById(int memberId) {
         return memberRepository.findById(memberId);
     }
@@ -89,7 +67,7 @@ public class MemberService {
     	return memberRepository.findByVerificationCode(verificationCode);
     }
     
-    public Member verify(String verificationCode) {
+    public Member verifyMemberEmail(String verificationCode) {
     	Member member = memberRepository.findByVerificationCode(verificationCode);
     	if (member == null || member.isActive()) {
     		return null;
@@ -99,4 +77,46 @@ public class MemberService {
     	return memberRepository.save(member);
     }
 
+	public void createResetPasswordToken(Member member) {
+		if (member == null) {
+			return;
+		}
+		member.setResetPasswordToken(RandomString.make(64));
+		memberRepository.save(member);
+	}
+
+	public Member verifyMemberResetPasswordToken(String resetPasswordToken) {
+		Member member = memberRepository.findByResetPasswordToken(resetPasswordToken);
+		if (member == null) {
+			return null;
+		}
+		member.setActive(true);
+		return member;
+	}
+
+	public void resetMemberPassword(ResetPassword resetPassword) {
+		Member member = this.verifyMemberResetPasswordToken(resetPassword.getResetPasswordToken());
+		member.setVerificationCode(null);
+		member.setResetPasswordToken(null);
+		member.setHashedPassword(this.hashPassword(resetPassword.getPassword()));
+		memberRepository.save(member);
+	}
+	
+	public List<Member> findOnlineMembers() {
+		long lastAllowedSecond = (Instant.now().getEpochSecond()*1000)-20000;
+		return memberRepository.findOnlineMembers(lastAllowedSecond);
+	}
+	
+	public Member save(Member member) {
+		return memberRepository.save(member);
+	}
+	
+	public int findTotalNumberOfMembers() {
+		return memberRepository.countBy();
+	}
+	
+	public int findTotalNumberOfActiveMembers(long activeSince) {
+		return memberRepository.countByLastActivityGreaterThan(activeSince);
+	}
+	
 }

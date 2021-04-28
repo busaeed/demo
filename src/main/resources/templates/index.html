@@ -3,11 +3,50 @@
 <head>
 <title>Insert title here</title>
 </head>
+<div sec:authorize="isAnonymous()">
+You are not logged in. Please register.
+</div>
 <body>
-Your name is <label th:text="${#httpServletRequest.remoteUser}"></label>
+Your name is <label th:text="${#httpServletRequest.remoteUser}"></label><br/>
+<span sec:authentication="principal.id">Username</span><br/>
+<span th:text="${username}">Username</span><br/>
+Number of online guests: 
+<span th:text="${statistics.numberOfOnlineGuests}"></span><br/>
+Number of online members: 
+<span th:text="${statistics.numberOfOnlineMembers}"></span><br/>
+Number of online visitors: 
+<span th:text="${statistics.numberOfOnlineVisitors}"></span><br/>
+Most Users Ever Online: 
+<span th:text="${statistics.mostUsersEverOnline.numberOfUsers}"></span> On <span th:text="${statistics.mostUsersEverOnline.dateTime}"></span><br/>
+Total Number of Members:
+<span th:text="${statistics.totalNumberOfMembers}"></span><br/>
+Total Number of Active Members:
+<span th:text="${statistics.totalNumberOfActiveMembers}"></span><br/>
+Total Number of Topics:
+<span th:text="${statistics.totalNumberOfTopics}"></span><br/>
+Total Number of Replies:
+<span th:text="${statistics.totalNumberOfReplies}"></span><br/>
+<div th:each="member: ${statistics.onlineMemberList}">
+	<span th:text="${member.id} + ' : ' + ${member.username}"></span><br>
+</div>
 <h3 th:inline="text">Result = [[${result}]]</h3>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Logout" />
 </form>
+<br>
+<span th:each="category : ${categories}">
+    <span th:text="${category.id} + ': ' + ${category.name}"></span><br>
+    <div th:each="forum : ${category.forums}">
+    	<span th:text="${forum.id} + ' : ' + ${forum.name} + ' : ' + ${forum.numberOfTopics} + ' : ' + ${forum.numberOfReplies} + ' : ' + ${forum.icon} + ' : ' + ${forum.description}"></span><br>
+    	<span th:if="!${forum.lastPost}" th:text="'No Post Yet'"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'ID: ' + ${forum.lastPost.topicId}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Title: ' + ${forum.lastPost.topicTitle}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Date: ' + ${forum.lastPost.lastPostDateTime}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Member ID: ' + ${forum.lastPost.memberId}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Username: ' + ${forum.lastPost.username}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Reply ID: ' + ${forum.lastPost.replyId}"></span>
+    	<span th:if="${forum.lastPost}" th:text=" 'Page Number: ' + ${forum.lastPost.pageNumber}"></span>
+	</div><br>
+</span>
 </body>
 </html>

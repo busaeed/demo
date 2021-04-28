@@ -6,4 +6,6 @@ import com.alt6wer.demo.model.Reply;
 
 public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
+	int countBy();
+
 }

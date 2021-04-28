@@ -26,7 +26,7 @@ import lombok.Setter;
 public class Reply {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply_sq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply_seq")
     private int id;
 
     @Column(nullable = false)

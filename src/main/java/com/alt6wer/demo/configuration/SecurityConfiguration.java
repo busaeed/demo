@@ -1,20 +1,20 @@
-package com.alt6wer.demo.security;
+package com.alt6wer.demo.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Configuration
+import com.alt6wer.demo.authentication.UserPrincipalService;
+
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private UserPrincipalService userPrincipalService;
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -23,7 +23,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+        auth
+        	.userDetailsService(userPrincipalService)
+        	.passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -42,10 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
             .and()
             .httpBasic();*/
+    	
         http
             .authorizeRequests()
-            	.antMatchers("/verify").permitAll()
+            	.antMatchers("/verifyEmail").permitAll()
             	.antMatchers("/register").anonymous()
+            	.antMatchers("/forget-password").anonymous()
+            	.antMatchers("/reset-password").anonymous()
                 .anyRequest().authenticated()//permitAll()//anonymous()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()

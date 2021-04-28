@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -36,7 +37,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @IdenticalPasswords
-public class Member implements Serializable {
+public class Member implements Serializable, Passwordable {
+	
+	private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
@@ -70,6 +73,9 @@ public class Member implements Serializable {
     @Column(length = 64)
     private String verificationCode;
     
+    @Column(name = "reset_password_token",length = 64)
+    private String resetPasswordToken;
+    
     @Column(nullable = false)
     private LocalDateTime registeredAt;
     
@@ -78,6 +84,9 @@ public class Member implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+    
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Session session;
     
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Topic> topics;
@@ -91,6 +100,11 @@ public class Member implements Serializable {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+    
+    public Member(int id, String username) {
+    	this.id = id;
+    	this.username = username;
     }
 
 	@Override

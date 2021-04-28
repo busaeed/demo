@@ -24,5 +24,9 @@ public class TopicService {
     public Topic findById(int topicId) {
         return topicRepository.findById(topicId);
     }
+    
+    public int findTotalNumberOfTopics() {
+    	return topicRepository.countBy();
+    }
 
 }

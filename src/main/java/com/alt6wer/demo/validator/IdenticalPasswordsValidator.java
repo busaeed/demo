@@ -3,9 +3,9 @@ package com.alt6wer.demo.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.alt6wer.demo.model.Member;
+import com.alt6wer.demo.model.Passwordable;
 
-public class IdenticalPasswordsValidator implements ConstraintValidator<IdenticalPasswords, Member> {
+public class IdenticalPasswordsValidator implements ConstraintValidator<IdenticalPasswords, Passwordable> {
 	
 	private String field;
 	private String message;
@@ -17,8 +17,8 @@ public class IdenticalPasswordsValidator implements ConstraintValidator<Identica
 	}
 	
 	@Override
-	public boolean isValid(Member member, ConstraintValidatorContext context) {
-		if (!member.getPassword().equals(member.getConfirmedPassword())) {
+	public boolean isValid(Passwordable passwordForm, ConstraintValidatorContext context) {
+		if (!passwordForm.getPassword().equals(passwordForm.getConfirmedPassword())) {
 			context.disableDefaultConstraintViolation();
 		      context.buildConstraintViolationWithTemplate(message)
 		          .addPropertyNode(field)
