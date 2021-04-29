@@ -56,6 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
                 .and()
                 .logout().permitAll()
+                
                 .and()
                 //you don't have to use the second validity method because by default it's 2 weeks or specify it in seconds.
                 //if you face a problem also add this .userDetailsService(myUserDetailsService)

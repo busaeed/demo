@@ -15,7 +15,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
     
-    public Category create(Category category) {
+    public Category insert(Category category) {
         return categoryRepository.save(category);
     }
     
@@ -23,8 +23,8 @@ public class CategoryService {
     	return null;
     }
     
-    public Category delete(Category delete) {
-    	return null;
+    public boolean delete(Category category) {
+    	return false;
     }
 
     public Category findById(int categoryId) {

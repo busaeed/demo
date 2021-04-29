@@ -15,6 +15,7 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(Member member) {
         this.member = member;
+        
     }
 
     @Override

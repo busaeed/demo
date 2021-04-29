@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alt6wer.demo.model.Member;
 import com.alt6wer.demo.model.Session;
@@ -30,14 +30,8 @@ public class CurrentPageInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		//log.info("preHandle from GeneralInterceptor");
-		HandlerMethod routeMethod = (HandlerMethod) handler;
-        GetMapping mapping = routeMethod.getMethodAnnotation(GetMapping.class);
-        String currentPage;
-        if (mapping != null) {
-        	currentPage = String.join("", mapping.value());
-        } else {
-        	currentPage = null;
-        }
+		UriComponentsBuilder builder = ServletUriComponentsBuilder.fromRequest(request);
+        String currentPage = builder.buildAndExpand().getPath();
         String sessionId = request.getRequestedSessionId();
         Session session = sessionService.findBySessionId(sessionId);
         if (session != null) {
