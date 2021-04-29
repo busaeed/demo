@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @SuppressWarnings("deprecation")
 @Entity
 @Immutable
+@Subselect("select * from last_post")
 @Table(name = "last_post")
 @Setter
 @Getter

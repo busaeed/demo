@@ -19,7 +19,7 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
 
 	Member findByResetPasswordToken(String resetPasswordToken);
 	
-	@Query("select NEW com.alt6wer.demo.model.Member (m.id, m.username) from Member m join m.session s where s.lastAccessTime > ?1")
+	@Query("select NEW com.alt6wer.demo.model.Member (m.id, m.username) from Member m join m.session s where s.lastAccessTime > ?1 group by m.id, m.username")
 	List<Member> findOnlineMembers(long lastAllowedSecond);
 	
 	int countBy();

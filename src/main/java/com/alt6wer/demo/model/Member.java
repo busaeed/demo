@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -85,8 +84,8 @@ public class Member implements Serializable, Passwordable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
     
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private Session session;
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    private List<Session> session;
     
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Topic> topics;

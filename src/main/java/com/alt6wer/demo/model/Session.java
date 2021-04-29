@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -20,6 +20,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Session implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "PRIMARY_ID")
@@ -37,7 +39,7 @@ public class Session implements Serializable {
 	@Column(name = "LAST_ACCESS_TIME")
 	private long lastAccessTime;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
 	private Member member;
 }
