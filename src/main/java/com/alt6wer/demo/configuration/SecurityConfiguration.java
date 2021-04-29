@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.alt6wer.demo.authentication.UserPrincipalService;
@@ -45,6 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .httpBasic();*/
     	
+    	http
+    		.sessionManagement()
+    			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+    	
         http
             .authorizeRequests()
             	.antMatchers("/verifyEmail").permitAll()
@@ -56,7 +61,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
                 .and()
                 .logout().permitAll()
-                
                 .and()
                 //you don't have to use the second validity method because by default it's 2 weeks or specify it in seconds.
                 //if you face a problem also add this .userDetailsService(myUserDetailsService)

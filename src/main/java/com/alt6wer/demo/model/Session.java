@@ -30,14 +30,14 @@ public class Session implements Serializable {
 	@Column(name = "SESSION_ID")
 	private String sessionId;
 	
-	@Column(name = "current_page")
-	private String currentPage;
+	@Column(name = "LAST_ACCESS_TIME")
+	private long lastAccessTime;
 	
 	@Column(name = "PRINCIPAL_NAME")
 	private String principalName;
 	
-	@Column(name = "LAST_ACCESS_TIME")
-	private long lastAccessTime;
+	@Column(name = "current_page", length = 100)
+	private String currentPage;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
